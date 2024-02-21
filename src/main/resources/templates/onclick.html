@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<td th:if="${loggedInUser.role.roleName == 'ADMIN'}">
+    <a th:href="@{/admin/user/role(role=${u.role.roleName}, id=${u.userId})}"
+       th:text="${u.role.roleName == 'USER' ? 'Set MODERATOR' : 'Set USER'}"
+       th:class="${u.role.roleName == 'USER' ? 'btn btn-primary' : 'btn btn-secondary'}"
+       th:onclick="'return confirmRoleChange()'" <!-- Thêm hàm confirmRoleChange() vào đây -->
+    ></a>
+</td>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function confirmRoleChange() {
+        var userResponse = confirm('Do you want to change the role?');
+        return userResponse;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

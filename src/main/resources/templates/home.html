@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6sa7an6Shop</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+<header>
+    <div class="header__main">
+        <nav class="header__left__nav navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Trang chủ</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#moveto">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Liên hệ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/product}">Sản Phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="header__logo"><a href="#"><img
+                src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Flogo.png?alt=media&token=2795cb90-d2f5-44a3-849a-97e13bc2c004"
+                alt="logo" width="150px" height="50px"></a></div>
+        <div class="header__right">
+            <ul>
+                <li sec:authorize="!isAuthenticated()" class="person"><a th:href="@{/login}"><span
+                        class="material-symbols-outlined">
+                        person
+                    </span></a>
+                </li>
+                <li>
+                    <div sec:authorize="isAuthenticated()">
+                        <nav class="navbar navbar-expand navbar-light navbar-bg">
+                            <a class="sidebar-toggle js-sidebar-toggle mx-2">
+                                <i class="hamburger align-self-center"></i>
+                            </a>
+
+                            <div class="navbar-collapse collapse">
+                                <ul class="navbar-nav navbar-align">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
+                                           data-bs-toggle="dropdown">
+                                            <i class="align-middle" data-feather="settings"></i>
+                                        </a>
+
+                                        <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
+                                           data-bs-toggle="dropdown">
+                                            <span class="text-dark"
+                                                  th:text="Hello +' '+ ${loggedInUser.getUsername()}"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" th:href="@{${loggedInUser.getRole().roleName == 'USER' ? '/customer/userInfor' : '/admin/user'}}">
+                                                <i class="align-middle me-1" data-feather="user" th:text="${loggedInUser.getRole().roleName == 'USER'  ? 'Profile' : 'User Manager'}"></i>
+                                            </a>
+
+                                            <a class="dropdown-item" th:href="@{${loggedInUser.getRole().roleName == 'USER' ? '/customer/cart' : '/admin/product'}}">
+                                                <i class="align-middle me-1" data-feather="user" th:text="${loggedInUser.getRole().roleName == 'USER' ? 'My Cart' : 'Product Manager'}"></i>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#"><i class="align-middle me-1"
+                                                                                 data-feather="help-circle"></i> Help
+                                                Center</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:document.logoutForm.submit()">Log
+                                                out</a>
+                                            <form name="logoutForm" th:action="@{/logout}" method="post"
+                                                  th:hidden="true">
+                                                <input hidden type="submit" value="Log out">
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="video">
+    <video autoplay loop muted
+           src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Fbackground-video.mp4?alt=media&token=253a8c81-afa0-4778-b3d7-673372d9a2bb"></video>
+</div>
+<div class="video__title" th:if="${loggedInUser != null and loggedInUser.statusAccount==false}">
+    <H2 style="color: red;background-color: white">Your account has been locked. Please contact us for assistance!</H2>
+</div>
+<div class="video__title" sec:authorize="!isAuthenticated()">
+    <h2>Hãy <a th:href="@{/login}">
+        <button class="btn btn-outline-light">Đăng nhập</button>
+    </a> để tham gia vào thế giới Gundam
+    </h2>
+    <p>Bạn chưa có tài khoản ? <a th:href="@{/save}">Đăng ký tại đây</a></p>
+</div>
+<div class="popup popup__logout">
+    <div class="popup__content popup__logout__content">
+        <p>Đang đăng xuất tài khoản</p>
+    </div>
+</div>
+<div class="popup popup__login">
+    <div class="popup__content popup__login__content">
+        <p>Bạn phải đăng nhập để mua hàng</p>
+        <div class="popup__confirm">
+            <button class="btn btn-primary"><a style="color: white; text-decoration: none;" th:href="@{/login}">Đăng
+                nhập</a></button>
+            <button onclick="cancelPopup()" class="btn btn-secondary">Hủy bỏ</button>
+        </div>
+        <p>Bạn chưa có tài khoản ? <a th:href="@{/save}">Đăng ký tại đây</a></p>
+    </div>
+</div>
+<div class="popup popup__block">
+    <div class="popup__content popup__block__content">
+        <p>Tài khoản của bạn đã bị khóa</p>
+        <div class="popup__confirm">
+            <button class="btn btn-primary"><a style="color: white; text-decoration: none;" href="#">Liên hệ</a>
+            </button>
+            <button onclick="cancelPopup()" class="btn btn-secondary">Hủy bỏ</button>
+        </div>
+    </div>
+</div>
+<section>
+    <div class="container__title">
+        <h2>Sản phẩm mới nhất</h2>
+    </div>
+    <div id="product" class="container__list row">
+    </div>
+    <div class="container__about" id="moveto">
+        <H2>Thông tin</H2>
+        <div class="container__about__main">
+            <div id="carouselExampleFade" class="container__about__title carousel slide carousel-fade">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Fanh1.png?alt=media&token=718d6ca7-39a5-4f5a-8fa2-eef11743488c" class="d-block w-100" alt="title1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Fanh2.png?alt=media&token=af13fe22-3b8b-4d6a-b060-c24667acc63e" class="d-block w-100" alt="title2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Fanh3.png?alt=media&token=11240aa3-4d87-482e-b50f-34074f68bc2d" class="d-block w-100" alt="title3">
+                    </div>
+                </div>
+                <div class="button__pre">
+                    <button class="prevBtn carousel-control-prev" type="button"
+                            data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                        &#60;
+                    </button>
+                </div>
+                <div class="button__next">
+                    <button class="nextBtn carousel-control-next" type="button"
+                            data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                        &#62;
+                    </button>
+                </div>
+
+            </div>
+            <div class="container__about__show">
+                <img src="https://firebasestorage.googleapis.com/v0/b/student-2b2db.appspot.com/o/projectmdl4%2Fanh11.jpg?alt=media&token=9a7c5c55-d6f2-4cdb-89a1-39bd0a8aaab2" alt="main">
+            </div>
+        </div>
+    </div>
+</section>
+<footer>
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-xs-12">
+                    <div class="first">
+                        <h4>Về chúng tôi</h4>
+                        <p>Với đội ngũ nhân viên tay nghề cao và trang thiết bị tân tiến nhất hiện nay chúng tôi
+                            tự tin sẽ đưa những sản phẩm tuyệt vời nhất đến tay khách hàng.
+                        </p>
+                        <p>Xin chân thành cảm ơn quý khách hàng đã lựa chọn tin tưởng chúng tôi.</p>
+                        <p>Mọi thông tin chi tiết xin liên hệ tới đội ngũ tư vấn : 09122xx34xxx.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-12">
+                    <div class="second">
+                        <h4> Menu</h4>
+                        <ul>
+                            <li><a href="#">Trang chủ</a></li>
+                            <li><a href="#product">Sản phẩm</a></li>
+                            <li><a href="#moveto">Thông tin</a></li>
+                            <li><a href="#contact">Liên Hệ</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-12">
+                    <div class="third">
+                        <h4 id="contact"> Contact</h4>
+                        <ul>
+                            <li>Project của Vũ Việt Anh</li>
+                            <li></li>
+                            <li><i class="far fa-envelope"></i>Tà Shop</li>
+                            <li><i class="far fa-envelope"></i> vuvietanh29061995@gmail.com</li>
+                            <li><i class="fas fa-map-marker-alt"></i>Thanh Trì , Hà Nội</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div style="margin-bottom: 50px;" class="line"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
